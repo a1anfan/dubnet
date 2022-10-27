@@ -25,6 +25,36 @@ tensor forward_activation_layer(layer *l, tensor x)
     // lrelu(x)    = x if x > 0 else .01 * x
     // softmax(x)  = e^{x_i} / sum(e^{x_j}) for all x_j in the same row 
 
+    assert(a == LOGISTIC || a == RELU || a == LRELU || a == SOFTMAX);
+
+    if (a == LOGISTIC) {
+
+    } else if (a == RELU) {
+
+        for (size_t i = 0; i < y.size[0]; i++) {
+            for (size_t j = 0; j < y.size[1]; j++) {
+                if (y.data[i * y.size[0] + j] < 0) {
+                    y.data[i * y.size[0] + j] = 0;
+                }
+            }
+        }
+
+    } else if (a == LRELU) {
+
+        for (size_t i = 0; i < y.size[0]; i++) {
+            for (size_t j = 0; j < y.size[1]; j++) {
+                if (y.data[i * y.size[0] + j] < 0) {
+                    y.data[i * y.size[0] + j] *= 0.01;
+                }
+            }
+        }
+
+    } else if (a == SOFTMAX) {
+
+    }
+
+    
+
     assert(x.n >= 2);
 
     /* You might want this
