@@ -29,6 +29,12 @@ tensor forward_activation_layer(layer *l, tensor x)
 
     if (a == LOGISTIC) {
 
+        for (size_t i = 0; i < y.size[0]; i++) {
+            for (size_t j = 0; j < y.size[1]; j++) {
+                y.data[i * y.size[0] + j] = 1 / (1 + exp(-y.data[i * y.size[0] + j]));
+            }
+        }
+
     } else if (a == RELU) {
 
         for (size_t i = 0; i < y.size[0]; i++) {
