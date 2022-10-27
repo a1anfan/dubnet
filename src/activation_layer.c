@@ -126,13 +126,14 @@ tensor backward_activation_layer(layer *l, tensor dy)
     if (a == LOGISTIC) {
 
         for (size_t i = 0; i < tensor_len(dx); i++) {
-            dx.data[i] = (float)(1.0 / (1.0 + exp(-dx.data[i])));
+            float lg = (float)(1.0 / (1.0 + exp(-x.data[i])));
+            dx.data[i] *= lg * (1 - lg);
         }
 
     } else if (a == RELU) {
 
         for (size_t i = 0; i < tensor_len(dx); i++) {
-            if (dx.data[i] <= 0) {
+            if (x.data[i] <= 0) {
                 dx.data[i] = 0;
             }
         }
@@ -140,7 +141,7 @@ tensor backward_activation_layer(layer *l, tensor dy)
     } else if (a == LRELU) {
 
         for (size_t i = 0; i < tensor_len(dx); i++) {
-            if (dx.data[i] <= 0) {
+            if (x.data[i] <= 0) {
                 dx.data[i] *= lrelu_alpha;
             }
         }
