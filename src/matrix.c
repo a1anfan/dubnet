@@ -25,8 +25,23 @@ tensor matrix_multiply(const tensor a, const tensor b)
     assert(b.n == 2);
     assert(a.size[1] == b.size[0]);
     // TODO 1.1: matrix multiplication! just use 3 for loops 
-    tensor t = tensor_make(0, 0);
-
+    size_t s[2] = {a.size[0], b.size[1]};
+    tensor t = tensor_make(a.n, s);
+    for (size_t i = 0; i < a.size[0]; i++)
+    {
+        /* code */
+        for (size_t j = 0; j < b.size[1]; j++)
+        {
+            /* code */
+            for (size_t z = 0; z < b.size[0]; z++)
+            {
+                /* code */
+                t.data[i * b.size[1] + j] += a.data[i * a.size[1] + z] * b.data[z * b.size[1] + j];
+            }
+        }
+        
+    }
+    
     return t;
 }
 
