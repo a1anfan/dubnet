@@ -27,35 +27,48 @@ tensor forward_activation_layer(layer *l, tensor x)
 
     assert(a == LOGISTIC || a == RELU || a == LRELU || a == SOFTMAX);
 
+    float lrelu_alpha = 0.01;
+
     if (a == LOGISTIC) {
 
-        for (size_t i = 0; i < y.size[0]; i++) {
-            for (size_t j = 0; j < y.size[1]; j++) {
-                y.data[i * y.size[0] + j] = 1 / (1 + exp(-y.data[i * y.size[0] + j]));
-            }
+        for (size_t i = 0; i < tensor_len(y); i++) {
+            y.data[i] = (float)(1.0 / (1.0 + exp(-y.data[i])));
         }
 
     } else if (a == RELU) {
 
-        for (size_t i = 0; i < y.size[0]; i++) {
-            for (size_t j = 0; j < y.size[1]; j++) {
-                if (y.data[i * y.size[0] + j] < 0) {
-                    y.data[i * y.size[0] + j] = 0;
-                }
+        for (size_t i = 0; i < tensor_len(y); i++) {
+            if (y.data[i] < 0) {
+                y.data[i] = 0;
             }
         }
 
     } else if (a == LRELU) {
 
-        for (size_t i = 0; i < y.size[0]; i++) {
-            for (size_t j = 0; j < y.size[1]; j++) {
-                if (y.data[i * y.size[0] + j] < 0) {
-                    y.data[i * y.size[0] + j] *= 0.01;
-                }
+        for (size_t i = 0; i < tensor_len(y); i++) {
+            if (y.data[i] < 0) {
+                y.data[i] *= lrelu_alpha;
             }
         }
 
     } else if (a == SOFTMAX) {
+
+        size_t i, j;
+        for(i = 0; i < x.size[0]; ++i){
+            tensor x_i = tensor_get_(x, i);
+            tensor y_i = tensor_get_(y, i);
+            size_t len = tensor_len(x_i);
+            float sum = 0.0;
+
+            for (j = 0; j < len; ++j) {
+                sum += exp(x_i.data[j]);
+            }
+
+            // sussy!
+            for (j = 0; j < len; ++j) {
+                y_i.data[j] = exp(y_i.data[j]) / sum;
+            }
+        }
 
     }
 
@@ -105,6 +118,38 @@ tensor backward_activation_layer(layer *l, tensor dy)
         // Do stuff in here
     }
     */
+
+    assert(a == LOGISTIC || a == RELU || a == LRELU || a == SOFTMAX);
+
+    float lrelu_alpha = 0.01;
+
+    if (a == LOGISTIC) {
+
+        for (size_t i = 0; i < tensor_len(dx); i++) {
+            dx.data[i] = (float)(1.0 / (1.0 + exp(-dx.data[i])));
+        }
+
+    } else if (a == RELU) {
+
+        for (size_t i = 0; i < tensor_len(dx); i++) {
+            if (dx.data[i] <= 0) {
+                dx.data[i] = 0;
+            }
+        }
+
+    } else if (a == LRELU) {
+
+        for (size_t i = 0; i < tensor_len(dx); i++) {
+            if (dx.data[i] <= 0) {
+                dx.data[i] *= lrelu_alpha;
+            }
+        }
+
+    } else if (a == SOFTMAX) {
+
+        // do nothing
+
+    }
 
     return dx;
 }
