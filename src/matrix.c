@@ -13,10 +13,9 @@ tensor matrix_transpose(tensor a)
     // TODO 1.0: return a transposed version of a (don't modify a)
     size_t s[2] = {a.size[1], a.size[0]};
     tensor t = tensor_make(a.n, s);
-    for (size_t i = 0; i < a.size[0]; i++) {
+    for (size_t i = 0; i < a.size[1]; i++) {
 
-        for (size_t j = 0; j < a.size[1]; j++) {
-
+        for (size_t j = 0; j < a.size[0]; j++) {
                 t.data[j * a.size[1] + i] = a.data[i * a.size[0] + j];
         }
     }
