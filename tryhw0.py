@@ -29,9 +29,9 @@ print
 print("making model...")
 batch = 128
 iters = 1500
-rate = .01
+rate = .1
 momentum = .9
-decay = .0005
+decay = .001
 
 m = softmax_model()
 print("training...")

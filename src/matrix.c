@@ -36,10 +36,10 @@ tensor matrix_multiply(const tensor a, const tensor b)
     for (size_t i = 0; i < a.size[0]; i++)
     {
         /* code */
-        for (size_t j = 0; j < b.size[1]; j++)
+        for (size_t z = 0; z < b.size[0]; z++)
         {
             /* code */
-            for (size_t z = 0; z < b.size[0]; z++)
+            for (size_t j = 0; j < b.size[1]; j++)
             {
                 /* code */
                 t.data[i * b.size[1] + j] += a.data[i * a.size[1] + z] * b.data[z * b.size[1] + j];
