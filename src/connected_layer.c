@@ -82,6 +82,12 @@ void update_connected_layer(layer *l, float rate, float momentum, float decay)
 
 
     // Do the same for biases as well but no need to use weight decay on biases
+    tensor_axpy_(decay, l->w, l->dw);
+    tensor_axpy_(-rate, l->dw, l->w);
+    tensor_scale_(momentum, l->dw);
+
+    tensor_axpy_(-rate, l->db, l->b);
+    tensor_scale_(momentum, l->db);
 }
 
 layer make_connected_layer(int inputs, int outputs)
