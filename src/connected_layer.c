@@ -21,7 +21,11 @@ tensor forward_connected_layer(layer *l, tensor x)
     l->x = x;
 
     // TODO: 3.0 - run the network forward
-    tensor y = tensor_make(0, 0);
+    size_t s[2] = {l->x.size[0], l->w.size[1]};
+    tensor y = tensor_make(l->x.n, s);
+
+    y = matrix_multiply(l->x, l->w);
+    y = tensor_add(y, l->b);
 
     return y;
 }
@@ -45,6 +49,8 @@ tensor backward_connected_layer(layer *l, tensor dy)
 
     // Calculate dL/dx and return it
     tensor dx = tensor_copy(dy);
+
+    
 
     return dx;
 }
