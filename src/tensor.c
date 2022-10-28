@@ -106,6 +106,7 @@ void tensor_axpy_(float a, tensor x, tensor y)
         /* code */
         y.data[i] = c.data[i] + y.data[i];
     }
+    tensor_free(c);
 }
 
 // Returns a new dimensionality view of a tensor

@@ -20,12 +20,12 @@ tensor forward_connected_layer(layer *l, tensor x)
     tensor_free(l->x);
     l->x = x;
 
-    // TODO: 3.0 - run the network forward
-    size_t s[2] = {l->x.size[0], l->w.size[1]};
-    tensor y = tensor_make(l->x.n, s);
+    // TODO: 3.0 - run the network forward;
 
-    y = matrix_multiply(l->x, l->w);
-    y = tensor_add(y, l->b);
+    tensor product = matrix_multiply(l->x, l->w);
+
+    tensor y = tensor_add(product, l->b);
+    tensor_free(product);
 
     return y;
 }
@@ -41,15 +41,25 @@ tensor backward_connected_layer(layer *l, tensor dy)
     // TODO: 3.1
     // Calculate the gradient dL/db for the bias terms using backward_bias
     // add this into any stored gradient info already in l.db
-
+    
+    tensor delta = tensor_sum_dim(dy, 0);
+    tensor_axpy_(1, delta, l->db);
+    tensor_free(delta);
 
     // Then calculate dL/dw. Use axpy to add this dL/dw into any previously stored
     // updates for our weights, which are stored in l.dw
 
 
     // Calculate dL/dx and return it
-    tensor dx = tensor_copy(dy);
 
+    tensor xT = matrix_transpose(l->x);
+    tensor dw = matrix_multiply(xT, dy);
+    tensor wT = matrix_transpose(l->w);
+    tensor_axpy_(1, dw, l->dw);
+    tensor dx = matrix_multiply(dy, wT);
+    tensor_free(xT);
+    tensor_free(dw);
+    tensor_free(wT);
     
 
     return dx;
