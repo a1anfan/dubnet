@@ -16,7 +16,7 @@ tensor matrix_transpose(tensor a)
     for (size_t i = 0; i < a.size[1]; i++) {
 
         for (size_t j = 0; j < a.size[0]; j++) {
-                t.data[j * a.size[1] + i] = a.data[i * a.size[0] + j];
+                t.data[i * a.size[0] + j] = a.data[j * a.size[1] + i];
         }
     }
     return t;
