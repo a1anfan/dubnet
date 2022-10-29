@@ -1,6 +1,6 @@
 from dubnet import *
 
-mnist = 1
+mnist = 0
 
 inputs = 784 if mnist else 3072
 
@@ -29,9 +29,9 @@ print
 print("making model...")
 batch = 128
 iters = 1500
-rate = .1
+rate = .01
 momentum = .9
-decay = .001
+decay = .0005
 
 m = softmax_model()
 print("training...")
@@ -42,3 +42,4 @@ print
 print("evaluating model...")
 print("training accuracy: %f", accuracy_net(m, train))
 print("test accuracy:     %f", accuracy_net(m, test))
+#our accuracy in CIFAR is less than half the accuracy for MNIST. Our changes that improved MNIST did not improve our CIFAR model. 
