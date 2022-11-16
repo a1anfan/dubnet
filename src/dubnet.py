@@ -193,7 +193,7 @@ tensor_make.restype = TENSOR
 def run_net_image(net, im):
     t = tensor_make(4, [1, im.h, im.w, im.c])
     t.data = im.data
-    return forward_net(net, m)
+    return forward_net(net, im)
 
 def make_net(layers):
     m = NET()
